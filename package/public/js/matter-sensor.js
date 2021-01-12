@@ -194,8 +194,8 @@ $(function () {
         var x = ww / 2 - 120;
         var y = wh / 2 - 50;
         var radius =
-          ww > 640 ? Common.random(10, 20, 30) : Common.random(8, 16, 24);
-
+          (ww > 640) ? Common.random(10, 20, 30) : Common.random(6, 12, 16);
+          //(ww > 640) ? Common.random(8, 16, 20) : Common.random(6, 12, 16);
         var Circle = Bodies.circle(x, y, radius, {
           restitution: 1.2,
           render: {
