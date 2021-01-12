@@ -132,4 +132,8 @@ body * {
   font-size: 1.2rem;
   font-weight: 400;
 }
+
+#clock {
+  padding-top: 40px;
+}
 /*# sourceMappingURL=style.css.map */

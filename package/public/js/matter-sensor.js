@@ -51,49 +51,15 @@ var render = Render.create({
 //var engine = Engine.create();
 
 
-// Container
-var ground = Bodies.rectangle(ww / 2, wh + 54, ww, 20, {
-  isStatic: true,
-  render: {
-    //fillStyle: "#FFB086",
-    fillStyle: "#transparent",
-  },
-});
-var wallLeft = Bodies.rectangle(45, wh / 2 + 30, 8, wh, {
-  isStatic: true,
-  render: {
-    //fillStyle: "#CCCCCC",
-    fillStyle: "#transparent",
-  },
-});
-var wallRight = Bodies.rectangle(ww + 45, wh / 2 + 30, 8, wh, {
-  isStatic: true,
-  render: {
-    //fillStyle: "#CCCCCC",
-    fillStyle: "#transparent",
-  },
-});
-
-var wallTop = Bodies.rectangle(ww / 2 + 45, 0, ww, 20, {
-  isStatic: true,
-  render: {
-    //fillStyle: "#FFB086",
-    fillStyle: "#transparent",
-  },
-});
-
-var sensor = Bodies.rectangle(ww / 2 + 45, wh / 2 + 54, ww, wh + 54, {
+var sensor = Bodies.circle(ww / 2 + 45, wh / 2 + 54, ww, {
   isStatic: true,
   isSensor: true,
   render: {
     fillStyle: "transparent",
-    // fillStyle: "#FFFFFF",
     // opacity: 0.3,
+    // fillStyle: "#00B7FF",
   },
 });
-
-// add all of the bodies to the world
-//World.add(engine.world, [sensor, ground, wallLeft, wallRight, wallTop]);
 
 var count = 0;
 // Sensor Control - Counting the objects
@@ -139,8 +105,8 @@ hourHand = addRect({
     density: 4,
     isStatic: true,
     render: {
-      fillStyle: "black",
-      strokeStyle: "black",
+      fillStyle: "white",
+      strokeStyle: "white",
       lineWidth: 10,
     },
   },
@@ -155,8 +121,8 @@ minuteHand = addRect({
     density: 4,
     isStatic: true,
     render: {
-      fillStyle: "black",
-      strokeStyle: "black",
+      fillStyle: "white",
+      strokeStyle: "white",
       lineWidth: 6,
     },
   },
@@ -171,8 +137,8 @@ secondHand = addRect({
     density: 4,
     isStatic: true,
     render: {
-      fillStyle: "black",
-      strokeStyle: "black",
+      fillStyle: "white",
+      strokeStyle: "white",
       lineWidth: 3,
     },
   },
@@ -180,7 +146,7 @@ secondHand = addRect({
 
 
 m = Math.min(sW, sH);
-rat = (1 / 4.5) * 2;
+rat = (1 / 4.5) * 2.0;
 r = m * rat;
 parts = [];
 pegCount = 64;
@@ -203,7 +169,8 @@ for (i = 0; i < pegCount; i++) {
       density: 1,
       render: {
         fillStyle: "transparent",
-        //strokeStyle: "white",
+        // fillStyle: "white",
+        // strokeStyle: "white",
         lineWidth: 0,
       },
     },
@@ -211,7 +178,7 @@ for (i = 0; i < pegCount; i++) {
   parts.push(rect);
 }
 function addBody(...bodies) {
-  World.add(engine.world, [...bodies, sensor]);
+  World.add(engine.world, [sensor, ...bodies]);
 }
 
 // Socket
@@ -227,10 +194,10 @@ $(function () {
         var x = ww / 2 - 120;
         var y = wh / 2 - 50;
         var radius =
-          ww > 640 ? Common.random(10, 30, 50) : Common.random(10, 25, 40);
+          ww > 640 ? Common.random(10, 20, 30) : Common.random(8, 16, 24);
 
         var Circle = Bodies.circle(x, y, radius, {
-          restitution: 1.0,
+          restitution: 1.2,
           render: {
             fillStyle: "#00B7FF",
             opacity: Common.random(0.3, 0.6, 0.9),
@@ -241,17 +208,6 @@ $(function () {
       }
     }
 
-    function tremorGravity() {
-      engine.world.gravity.y = 0.003;
-      engine.world.gravity.x = 0.003;
-      setTimeout(function () {
-        engine.world.gravity.y = -0.003;
-        engine.world.gravity.x = -0.003;
-      }, 2000);
-    }
-
-    //tremorGravity();
-
     // setTimeout(function(){
     //   console.log("setTimeout is working")
     //   //console.log(World.Bodies.circle);
@@ -259,20 +215,26 @@ $(function () {
     //   //console.log(engine.world.bodies);
     //   //Matter.Composite.remove(engine.world, engine.world.bodies[4], true);
     // }, 3000);
+    
+    var filteringCircle = engine.world.bodies.filter(obj => {
+      return obj.label === 'Circle Body'
+    })
+    //console.log(filteringCircle);
 
     if (dif > 0) {
       console.log("Count < humidity. Dif is " + dif);
       addBall();
     } else if (dif < 0) {
       console.log("Need to reduce");
-      Matter.Composite.remove(engine.world, engine.world.bodies[4], true);
+      Matter.Composite.remove(engine.world, filteringCircle[0], true);
+      
     } else if ((dif = 0)) {
       console.log("Balanced");
     }
   });
 });
 
-engine.world.gravity.y = 0.008;
+engine.world.gravity.y = -0.001;
 
 function addRect({ x = 0, y = 0, w = 10, h = 10, options = {} } = {}) {
   body = Bodies.rectangle(x, y, w, h, options);
@@ -284,31 +246,34 @@ hourHand.vertices[0].x = -1;
 hourHand.vertices[0].y = 0;
 hourHand.vertices[1].x = -5;
 hourHand.vertices[1].y = 0;
-Body.scale(hourHand, 0.3, 0.2);
+Body.scale(hourHand, 0.25, 0.15);
 Body.setVertices(hourHand, hourHand.vertices);
 minuteHand.vertices[0].x = -1;
 minuteHand.vertices[0].y = 0;
 minuteHand.vertices[1].x = -5;
 minuteHand.vertices[1].y = 0;
-Body.scale(minuteHand, 0.4, 0.3);
+Body.scale(minuteHand, 0.35, 0.25);
 Body.setVertices(minuteHand, minuteHand.vertices);
 secondHand.vertices[0].x = -1;
 secondHand.vertices[0].y = 0;
 secondHand.vertices[1].x = -5;
 secondHand.vertices[1].y = 0;
-Body.scale(secondHand, 0.4, 0.4);
+Body.scale(secondHand, 0.35, 0.35);
 Body.setVertices(secondHand, secondHand.vertices);
 function draw() {
   var now = new Date(),
     diff = Math.abs(start.getTime() - now.getTime()) / 1000,
-    degS = ((sec + diff) / 60) * 360,
-    degM = ((min + diff) / 3600) * 360,
-    degH = ((hour + diff) / 43200) * 360;
-  Body.setAngle(hourHand, (degH * Math.PI) / 180);
-  Body.setAngle(minuteHand, (degM * Math.PI) / 180);
-  Body.setAngle(secondHand, (degS * Math.PI) / 180);
+    degS = ((sec + diff) / 60) * 360 + 30,
+    degM = ((min + diff) / 3600) * 360 + 30,
+    degH = ((hour + diff) / 43200) * 360 + 30;
+  Body.setAngle(hourHand, ((degH * Math.PI) / 180));
+  Body.setAngle(minuteHand, ((degM * Math.PI) / 180));
+  Body.setAngle(secondHand, ((degS * Math.PI) / 180));
   requestAnimationFrame(draw);
+  var timeMin = degM / 6;
+  //console.log(degS);
 }
+
 
 draw();
 
@@ -330,6 +295,8 @@ function resizeend() {
     resetBounds();
   }
 }
+
+
 
 ////////////////
 
