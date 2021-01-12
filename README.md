@@ -3,7 +3,6 @@ Room humidity and temperature visualization prototype app using Arduino and DHT2
 
 ![Demo image](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/814c2024-5a90-415c-a12c-fe86a51e54b7/demo_humidity_matter.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210112%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210112T054423Z&X-Amz-Expires=86400&X-Amz-Signature=8c73b0174b277db20f63ea69474f7630d5e87664fcfdbb1a4fde5ef90ac98e3e&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22demo_humidity_matter.gif%22 "Demo Image")
 
-[Example]:  "Example Image"
 
 # How It Works
 
