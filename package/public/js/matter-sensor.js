@@ -20,6 +20,9 @@ var Engine = Matter.Engine,
 var ww = window.innerWidth;
 var wh = window.innerHeight;
 
+// Images
+//var water1 = require("../img/Water-1.png");
+
 // Number control
 
 // create an engine
@@ -29,8 +32,8 @@ var start = new Date(),
   sec = start.getSeconds(),
   min = start.getMinutes() * 60 + sec,
   hour = (start.getHours() % 12) * 3600 + min;
-sW = $(window).width() / 2;
-sH = $(window).width() / 2;
+sW = $(window).width();
+sH = $(window).width() / 3 * 2;
 
 var engine = Engine.create($("#clock"));
 
@@ -51,13 +54,13 @@ var render = Render.create({
 //var engine = Engine.create();
 
 
-var sensor = Bodies.circle(ww / 2 + 45, wh / 2 + 54, ww, {
+var sensor = Bodies.circle(sW / 2, sH / 2, sW/4 + 32, {
   isStatic: true,
   isSensor: true,
   render: {
     fillStyle: "transparent",
-    // opacity: 0.3,
     // fillStyle: "#00B7FF",
+    // opacity: 0.3,
   },
 });
 
@@ -98,15 +101,15 @@ Events.on(engine, "collisionEnd", function (event) {
 hourHand = addRect({
   x: sW / 2,
   y: sH / 2,
-  w: 15,
+  w: 20,
   h: sW - 20,
   options: {
     angle: 0,
     density: 4,
     isStatic: true,
     render: {
-      fillStyle: "white",
-      strokeStyle: "white",
+      fillStyle: "black",
+      strokeStyle: "black",
       lineWidth: 10,
     },
   },
@@ -114,15 +117,15 @@ hourHand = addRect({
 minuteHand = addRect({
   x: sW / 2,
   y: sH / 2,
-  w: 15,
+  w: 10,
   h: sW - 20,
   options: {
     angle: 0,
     density: 4,
     isStatic: true,
     render: {
-      fillStyle: "white",
-      strokeStyle: "white",
+      fillStyle: "#000000",
+      strokeStyle: "#000000",
       lineWidth: 6,
     },
   },
@@ -131,14 +134,16 @@ secondHand = addRect({
   x: sW / 2,
   y: sH / 2,
   w: 15,
-  h: sW - 20,
+  h: sW - 100,
   options: {
     angle: 0,
     density: 4,
     isStatic: true,
     render: {
-      fillStyle: "white",
-      strokeStyle: "white",
+      fillStyle: "#8bc34a",
+      strokeStyle: "#8bc34a",
+      // fillStyle: "#FE7452",
+      // strokeStyle: "#FE7452",
       lineWidth: 3,
     },
   },
@@ -146,7 +151,7 @@ secondHand = addRect({
 
 
 m = Math.min(sW, sH);
-rat = (1 / 4.5) * 2.0;
+rat = (1 / 4.5) * 1.75; //Clock container size
 r = m * rat;
 parts = [];
 pegCount = 64;
@@ -178,7 +183,9 @@ for (i = 0; i < pegCount; i++) {
   parts.push(rect);
 }
 function addBody(...bodies) {
-  World.add(engine.world, [sensor, ...bodies]);
+  //World.add(engine.world, [sensor, ...bodies]);
+  World.add(engine.world, sensor);
+  World.add(engine.world, ...bodies);
 }
 
 // Socket
@@ -193,42 +200,80 @@ $(function () {
       for (var i = 0; i < dif; i++) {
         var x = ww / 2 - 120;
         var y = wh / 2 - 50;
-        var radius =
-          (ww > 640) ? Common.random(10, 20, 30) : Common.random(6, 12, 16);
+        var radius = Common.random(15, 20, 25) ;
           //(ww > 640) ? Common.random(8, 16, 20) : Common.random(6, 12, 16);
-        var Circle = Bodies.circle(x, y, radius, {
-          restitution: 1.2,
+        
+        var Circle1 = Bodies.circle(x, y, radius, {
+          restitution: 1.1,
           render: {
-            fillStyle: "#00B7FF",
-            opacity: Common.random(0.3, 0.6, 0.9),
+            //fillStyle: "#00B7FF",
+            opacity: Common.random(0.7, 0.9, 1),
+            sprite: {
+              texture: '../img/Water-2.png',
+              xScale: 0.12,
+              yScale: 0.12
+            }
           },
+          label: 'humidity'
         });
 
-        World.add(engine.world, Circle);
+        var Circle2 = Bodies.circle(x, y, radius, {
+          restitution: 1.1,
+          render: {
+            //fillStyle: "#00B7FF",
+            //opacity: Common.random(0.6, 0.8, 1),
+            sprite: {
+              texture: '../img/Water-3.png',
+              xScale: 0.15,
+              yScale: 0.15
+            }
+          },
+          label: 'humidity'
+        });
+
+        var Circle3 = Bodies.circle(x, y, radius, {
+          restitution: 1.1,
+          render: {
+            //fillStyle: "#00B7FF",
+            //opacity: Common.random(0.6, 0.8, 1),
+            sprite: {
+              texture: '../img/Water-4.png',
+              xScale: 0.14,
+              yScale: 0.14
+            }
+          },
+          label: 'humidity'
+        });
+
+        World.add(engine.world, [Circle1, Circle2, Circle3]);
+
       }
     }
-
-    // setTimeout(function(){
-    //   console.log("setTimeout is working")
-    //   //console.log(World.Bodies.circle);
-    //   //console.log(World.Bodies);
-    //   //console.log(engine.world.bodies);
-    //   //Matter.Composite.remove(engine.world, engine.world.bodies[4], true);
-    // }, 3000);
     
     var filteringCircle = engine.world.bodies.filter(obj => {
-      return obj.label === 'Circle Body'
+      return obj.label === 'humidity'
     })
-    //console.log(filteringCircle);
+    
+
+    var rectangle = engine.world.bodies.filter(obj => {
+      return obj.label === 'Rectangle Body'
+    })
+    console.log('Body is ' + rectangle[0])
+
+    //Matter.Composite.remove(engine.world, rectangle[30, 31, 32, 33, 34, 35], true);
 
     if (dif > 0) {
       console.log("Count < humidity. Dif is " + dif);
       addBall();
     } else if (dif < 0) {
       console.log("Need to reduce");
-      Matter.Composite.remove(engine.world, filteringCircle[0], true);
+      var redundant = count - Math.round(humidityLevel);
+      console.log(redundant);
+      for (var i = 0; i < redundant; i++) {
+        Matter.Composite.remove(engine.world, filteringCircle[i], true);
+      }
       
-    } else if ((dif = 0)) {
+    } else if ((dif == 0)) {
       console.log("Balanced");
     }
   });
@@ -246,19 +291,19 @@ hourHand.vertices[0].x = -1;
 hourHand.vertices[0].y = 0;
 hourHand.vertices[1].x = -5;
 hourHand.vertices[1].y = 0;
-Body.scale(hourHand, 0.25, 0.15);
+Body.scale(hourHand, 0.25, 0.10);
 Body.setVertices(hourHand, hourHand.vertices);
 minuteHand.vertices[0].x = -1;
 minuteHand.vertices[0].y = 0;
 minuteHand.vertices[1].x = -5;
 minuteHand.vertices[1].y = 0;
-Body.scale(minuteHand, 0.35, 0.25);
+Body.scale(minuteHand, 0.35, 0.10);
 Body.setVertices(minuteHand, minuteHand.vertices);
 secondHand.vertices[0].x = -1;
 secondHand.vertices[0].y = 0;
 secondHand.vertices[1].x = -5;
 secondHand.vertices[1].y = 0;
-Body.scale(secondHand, 0.35, 0.35);
+Body.scale(secondHand, 0.35, 0.25);
 Body.setVertices(secondHand, secondHand.vertices);
 function draw() {
   var now = new Date(),

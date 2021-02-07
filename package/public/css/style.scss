@@ -46,7 +46,7 @@ body {
   bottom: 0;
   top: 0;
   font-family: 'Nunito', sans-serif !important;
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(#8bc34a, 0.4);
   display: flex;
   justify-content: center;
   transition: 0.4s ease;
@@ -72,7 +72,7 @@ body * {
   //height: 120px;
   padding: 24px;
   //background: rgba(0, 0, 0, 0.1);
-  color: #FFF;
+  color: rgb(29, 29, 29);
   display: flex;
   justify-content: space-evenly;
   .item {
@@ -88,8 +88,8 @@ body * {
     display: flex;
     align-items: baseline;
     .data {
-      font-size: 4rem;
-      font-weight: 700;
+      font-size: 3rem;
+      font-weight: 900;
       @media screen and (max-width: 480px) {
         font-size: 2.6rem;
       }
@@ -108,7 +108,7 @@ header {
   position: absolute;
   top: 0;
   left: 0;
-  color: #FFF;
+  color: rgb(29, 29, 29);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -117,11 +117,12 @@ header {
     height: 0; 
     border-left: 6px solid transparent;
     border-right: 6px solid transparent;
-    border-top: 6px solid rgb(255, 255, 255);
+    border-top: 6px solid rgb(29, 29, 29);
     margin-left: 12px;
   }
 }
 
 #clock {
-  padding-top: 64px;
+  //padding-top: 64px;
+  margin-top: -56px;
 }
